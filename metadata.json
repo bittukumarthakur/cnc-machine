@@ -1,0 +1,8 @@
+{
+  "name": "Copy of Artesian Sleep CNC Studio",
+  "description": "Specialized CNC design studio for bespoke wooden beds. Generate milling-ready relief patterns for headboards and frames using advanced AI.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
