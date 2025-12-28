@@ -1,15 +1,14 @@
-
 import React, { useState } from 'react';
 
 const CATEGORIES = ['All', 'Headboards', 'Footboards', 'Side Rails', 'Custom'];
 
 const ITEMS = [
-  { id: '1', title: 'The Royal Oak Relief', category: 'Headboards', image: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=800' },
-  { id: '2', title: 'Geometric Minimalist', category: 'Footboards', image: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&q=80&w=800' },
-  { id: '3', title: 'Mahogany Vine Pattern', category: 'Headboards', image: 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&q=80&w=800' },
+  { id: '1', title: 'The Royal Oak Relief', category: 'Headboards', image: 'https://images.unsplash.com/photo-1616594197247-b69566203851?auto=format&fit=crop&q=80&w=800' },
+  { id: '2', title: 'Geometric Minimalist', category: 'Footboards', image: 'https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&q=80&w=800' },
+  { id: '3', title: 'Mahogany Vine Pattern', category: 'Headboards', image: 'https://images.unsplash.com/photo-1618219944342-824e40a13285?auto=format&fit=crop&q=80&w=800' },
   { id: '4', title: 'Art Deco Frame Set', category: 'Side Rails', image: 'https://images.unsplash.com/photo-1615529328331-f8917597711f?auto=format&fit=crop&q=80&w=800' },
   { id: '5', title: 'Custom Family Crest', category: 'Custom', image: 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&q=80&w=800' },
-  { id: '6', title: 'Modern Slat Deep-Carve', category: 'Headboards', image: 'https://images.unsplash.com/photo-1616594197247-b69566203851?auto=format&fit=crop&q=80&w=800' },
+  { id: '6', title: 'Modern Slat Deep-Carve', category: 'Headboards', image: 'https://images.unsplash.com/photo-1534349762230-e0cadf78f5dd?auto=format&fit=crop&q=80&w=800' },
 ];
 
 export const Gallery: React.FC = () => {

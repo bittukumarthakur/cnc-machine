@@ -12,6 +12,7 @@ export interface DesignConcept {
   id: string;
   prompt: string;
   imageUrl: string;
+  heights?: number[][]; // Raw normalized height data (0-1)
   timestamp: number;
 }
 

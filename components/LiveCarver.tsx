@@ -1,9 +1,8 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Modality } from '@google/genai';
 import { Mic, MicOff, PhoneOff, User, Bot, Loader2 } from 'lucide-react';
 
-// Audio decoding helpers provided by instructions
+// Audio decoding helpers
 function decode(base64: string) {
   const binaryString = atob(base64);
   const len = binaryString.length;
@@ -61,7 +60,9 @@ export const LiveCarver: React.FC = () => {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
-    sourcesRef.current.forEach(source => source.stop());
+    sourcesRef.current.forEach(source => {
+      try { source.stop(); } catch (e) {}
+    });
     sourcesRef.current.clear();
     setIsActive(false);
     setIsConnecting(false);
@@ -70,6 +71,7 @@ export const LiveCarver: React.FC = () => {
   const startSession = async () => {
     setIsConnecting(true);
     try {
+      // Create fresh instance right before connecting
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
@@ -102,7 +104,12 @@ export const LiveCarver: React.FC = () => {
                 data: encode(new Uint8Array(int16.buffer)),
                 mimeType: 'audio/pcm;rate=16000',
               };
-              sessionPromise.then(session => session.sendRealtimeInput({ media: pcmBlob }));
+              // Crucial: only send if session is established
+              sessionPromise.then(session => {
+                try {
+                  session.sendRealtimeInput({ media: pcmBlob });
+                } catch (err) {}
+              });
             };
             source.connect(scriptProcessor);
             scriptProcessor.connect(inputAudioContext.destination);
@@ -111,7 +118,7 @@ export const LiveCarver: React.FC = () => {
           },
           onmessage: async (message) => {
             // Handle Audio
-            const audioData = message.serverContent?.modelTurn?.parts[0]?.inlineData?.data;
+            const audioData = message.serverContent?.modelTurn?.parts?.[0]?.inlineData?.data;
             if (audioData && audioContextRef.current) {
               const ctx = audioContextRef.current;
               nextStartTimeRef.current = Math.max(nextStartTimeRef.current, ctx.currentTime);
@@ -136,12 +143,17 @@ export const LiveCarver: React.FC = () => {
             }
 
             if (message.serverContent?.interrupted) {
-              sourcesRef.current.forEach(s => s.stop());
+              sourcesRef.current.forEach(s => {
+                try { s.stop(); } catch (e) {}
+              });
               sourcesRef.current.clear();
               nextStartTimeRef.current = 0;
             }
           },
-          onerror: (e) => console.error("Live Error:", e),
+          onerror: (e) => {
+            console.error("Live Error:", e);
+            stopSession();
+          },
           onclose: () => stopSession(),
         }
       });
